@@ -68,6 +68,7 @@ public class PlantTypeSeeds {
     // Util
 
     public static boolean isSeeds(ItemStack item) {
+        if (item == null) return false;
         return item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(PERSISTENT_DATA_KEY, PersistentDataType.STRING);
     }
 

@@ -1,11 +1,11 @@
 package dev.jsinco.brewery.events;
 
 import com.dre.brewery.utility.Logging;
+import dev.jsinco.brewery.constants.PlantPart;
 import dev.jsinco.brewery.constants.PlantType;
 import dev.jsinco.brewery.constants.PlantTypeSeeds;
 import dev.jsinco.brewery.objects.GardenManager;
 import dev.jsinco.brewery.objects.GardenPlant;
-import dev.jsinco.brewery.constants.PlantPart;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,23 +33,32 @@ public class EventListeners implements Listener {
         this.gardenManager = gardenManager;
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onLeafDecay(LeavesDecayEvent event) {
+        GardenPlant gardenPlant = gardenManager.getByLocation(event.getBlock());
+        if (gardenPlant != null) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().getType() == Material.SHORT_GRASS) {
+        Block block = event.getBlock();
+        if (block.getType() == Material.SHORT_GRASS) {
             List<PlantTypeSeeds> seedsList = PlantTypeSeeds.values();
-            event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
+            block.getWorld().dropItemNaturally(block.getLocation(),
                     seedsList.get(RANDOM.nextInt(seedsList.size())).getItemStack(1));
             return;
         }
 
-        GardenPlant gardenPlant = gardenManager.getByLocation(event.getBlock().getLocation());
+        GardenPlant gardenPlant = gardenManager.getByLocation(block);
         if (gardenPlant == null) {
             return;
         }
 
-        Logging.debugLog("Found a GardenPlant at Location: " + event.getBlock().getLocation());
-
-        if (!gardenPlant.isValid()) {
+        Logging.debugLog("Found a GardenPlant at Location for BlockBreak: " + block.getLocation());
+        // #isValid won't work here. Block's material type won't update until after this event has finished firing.
+        if (block.getType() != Material.PLAYER_HEAD) { // Just gonna do this for now
             gardenManager.removePlant(gardenPlant);
         }
     }
@@ -77,7 +87,7 @@ public class EventListeners implements Listener {
 
         Location clickedLocation = clickedBlock.getLocation();
 
-        GardenPlant gardenPlant = gardenManager.getByLocation(clickedLocation);
+        GardenPlant gardenPlant = gardenManager.getByLocation(clickedBlock);
         if (gardenPlant == null || gardenPlant.getPlantPart(clickedLocation) != PlantPart.TOP || !gardenPlant.isValid()) {
             return;
         }
@@ -100,6 +110,7 @@ public class EventListeners implements Listener {
         gardenManager.addPlant(gardenPlant);
 
         location.getWorld().playSound(location, Sound.BLOCK_GRASS_PLACE, 1.0f, 1.0f);
+        itemInHand.setAmount(itemInHand.getAmount() - 1);
         return true;
     }
 }

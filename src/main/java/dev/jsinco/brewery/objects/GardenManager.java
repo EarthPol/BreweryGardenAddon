@@ -6,7 +6,7 @@ import com.dre.brewery.depend.okaeri.configs.annotation.Comment;
 import com.dre.brewery.utility.Logging;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -18,6 +18,8 @@ import java.util.UUID;
 @OkaeriConfigFileOptions("plants.yml")
 public class GardenManager extends AddonConfigFile {
 
+    // TODO: This is bad, but I haven't opened up BreweryX's DataManager for supporting generic objects and paths yet,
+    //  so it will have to do for now.
     @Comment("Persistent data for BreweryGarden plants. Don't touch.")
     private List<GardenPlant> gardenPlants = new ArrayList<>();
 
@@ -34,14 +36,22 @@ public class GardenManager extends AddonConfigFile {
     }
 
     @Nullable
-    public GardenPlant getByLocation(Location l) {
+    public GardenPlant getByLocation(Block l) {
         if (l == null) return null;
         for (GardenPlant plant : gardenPlants) {
-            if (plant.getRegion().contains(l.getX(), l.getY(), l.getZ())) {
+            if (plant.getRegion().getBlocks().contains(l)) {
                 return plant;
             }
         }
         return null;
+    }
+
+    public void validatePlants() {
+        gardenPlants.forEach(gardenPlant -> {
+            if (!gardenPlant.isValid()) {
+                removePlant(gardenPlant);
+            }
+        });
     }
 
     public void addPlant(GardenPlant plant) {

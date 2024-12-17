@@ -5,6 +5,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.dre.brewery.BreweryPlugin;
 import dev.jsinco.brewery.BreweryGarden;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import lombok.Getter;
@@ -74,7 +75,7 @@ public class PlantType {
     private final String base64Texture;
 
     private PlantType(String name, String skin) {
-        this.name = MiniMessage.miniMessage().deserialize(name);
+        this.name = MiniMessage.miniMessage().deserialize("<!i>" + name);
         this.base64Texture = skin;
     }
 
@@ -87,14 +88,10 @@ public class PlantType {
     @SuppressWarnings("UnstableApiUsage")
     public ItemStack getItemStack(int amount) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD, amount);
-        item.setData(DataComponentTypes.ITEM_NAME, name);
+        item.setData(DataComponentTypes.CUSTOM_NAME, name);
         item.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(this.getPlayerProfile()));
-
-        FoodProperties foodProps = FoodProperties.food()
-                .nutrition(RANDOM.nextInt(2,5))
-                .saturation((float) RANDOM.nextInt(1, 4))
-                .build();
-        item.setData(DataComponentTypes.FOOD, foodProps);
+        item.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().build());
+        item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(3).saturation(2.0f).build());
 
         // TODO: Ask in Paper discord how to use PDC with new ItemMeta API
         ItemMeta meta = item.getItemMeta();
@@ -112,6 +109,7 @@ public class PlantType {
     // Util
 
     public static boolean isPlant(ItemStack item) {
+        if (item == null) return false;
         return item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(PERSISTENT_DATA_KEY, PersistentDataType.STRING);
     }
 

@@ -11,6 +11,7 @@ import lombok.ToString;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Leaves;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -49,29 +50,25 @@ public class GardenPlant {
     // MIDDLE = OAK_LEAVES
     // TOP = PLANT HEAD
     public boolean place() {
-        // TODO: Some checks to make sure each plant part is air before we place our plant.
-
-
-        Logging.debugLog("Plant at max growth stage, placing.");
         for (var plantPart : PlantPart.values()) {
             if (plantPart == PlantPart.TOP) {
                 if (!this.isFullyGrown()) {
                     this.age++;
-                    Logging.debugLog("Grown plant to stage: &e" + this.age);
                     continue;
                 }
                 this.age = 0;
             }
 
-            Logging.debugLog("Placing PlantPart: &d" + plantPart.name());
             Location location = plantPart.locationFromCenter(region.getCenter(), region.getWorld());
             Block block = location.getBlock();
             if (block.getType() != Material.AIR) {
-                Logging.debugLog("Not air at location, skipping PLANTPART");
                 continue;
             }
 
             block.setType(plantPart.getAssigneeMaterial());
+            if (block.getBlockData() instanceof Leaves leaves) {
+                leaves.setPersistent(true); // Either this doesn't work or it has a misleading name
+            }
             if (plantPart.getAssigneeMaterial() == Material.PLAYER_HEAD) {
                 type.setSkullTexture(block);
             }
