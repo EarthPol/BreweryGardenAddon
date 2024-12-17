@@ -1,6 +1,8 @@
 package dev.jsinco.brewery.events;
 
 import com.dre.brewery.utility.Logging;
+import dev.jsinco.brewery.BreweryGarden;
+import dev.jsinco.brewery.configuration.BreweryGardenConfig;
 import dev.jsinco.brewery.constants.PlantPart;
 import dev.jsinco.brewery.constants.PlantType;
 import dev.jsinco.brewery.constants.PlantTypeSeeds;
@@ -26,7 +28,9 @@ import java.util.Random;
 public class EventListeners implements Listener {
 
     private static final Random RANDOM = new Random();
-
+    
+    
+    private final BreweryGardenConfig config = BreweryGarden.getInstance().getAddonConfigManager().getConfig(BreweryGardenConfig.class);
     private final GardenManager gardenManager;
 
     public EventListeners(GardenManager gardenManager) {
@@ -44,11 +48,11 @@ public class EventListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (block.getType() == Material.SHORT_GRASS) {
+        if (config.getValidSeedDropBlocks().contains(block.getType()) && RANDOM.nextInt(100) <= config.getSeedSpawnChance()) {
             List<PlantTypeSeeds> seedsList = PlantTypeSeeds.values();
+            // Drop a seed
             block.getWorld().dropItemNaturally(block.getLocation(),
                     seedsList.get(RANDOM.nextInt(seedsList.size())).getItemStack(1));
-            return;
         }
 
         GardenPlant gardenPlant = gardenManager.getByLocation(block);
@@ -66,9 +70,14 @@ public class EventListeners implements Listener {
     // TODO: I'm not going to put debug statements, gonna need IJ debugger for this test
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        handlePlantShearing(event.getItem(), event.getClickedBlock());
-        if (event.getBlockFace() == BlockFace.UP) {
-            event.setCancelled(handleSeedPlacement(event.getItem(), event.getClickedBlock()));
+        Block block = event.getClickedBlock();
+        if (block == null) {
+            return;
+        }
+
+        handlePlantShearing(event.getItem(), block);
+        if (event.getBlockFace() == BlockFace.UP && config.getPlantableBlocks().contains(block.getType())) {
+            event.setCancelled(handleSeedPlacement(event.getItem(), block));
         }
     }
 
@@ -81,7 +90,7 @@ public class EventListeners implements Listener {
 
 
     private void handlePlantShearing(ItemStack itemInHand, Block clickedBlock) {
-        if (itemInHand == null || itemInHand.getType() != Material.SHEARS || clickedBlock == null  ) {
+        if (itemInHand == null || itemInHand.getType() != Material.SHEARS) {
             return;
         }
 
@@ -95,7 +104,7 @@ public class EventListeners implements Listener {
     }
 
     private boolean handleSeedPlacement(ItemStack itemInHand, Block clickedBlock) {
-        if (!PlantTypeSeeds.isSeeds(itemInHand) || clickedBlock == null) {
+        if (!PlantTypeSeeds.isSeeds(itemInHand)) {
             return false;
         }
 

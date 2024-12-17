@@ -1,6 +1,8 @@
 package dev.jsinco.brewery.objects;
 
 import com.dre.brewery.utility.Logging;
+import dev.jsinco.brewery.BreweryGarden;
+import dev.jsinco.brewery.configuration.BreweryGardenConfig;
 import dev.jsinco.brewery.constants.PlantPart;
 import dev.jsinco.brewery.constants.PlantType;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,7 @@ public class GardenPlant {
     // If you're reading this, maybe submit a PR? ^ :)
 
     private static final Random RANDOM = new Random();
+    private static final BreweryGardenConfig config = BreweryGarden.getInstance().getAddonConfigManager().getConfig(BreweryGardenConfig.class);
 
     private final UUID id;
     private final PlantType type;
@@ -115,7 +118,7 @@ public class GardenPlant {
 
 
     public boolean isFullyGrown() {
-        return this.age >= 4;
+        return this.age >= config.getFullyGrown();
     }
 
     public void incrementGrowthStage(int amount) {
