@@ -32,7 +32,7 @@ import static dev.jsinco.brewery.utility.PlayerSkinUtil.fromHashCode;
 
 
 @Getter
-public class PlantType {
+public final class PlantType {
 
     // TODO: get some plant base64 textures
     public static final PlantType BERRY = new PlantType(
@@ -78,6 +78,7 @@ public class PlantType {
         this.name = MiniMessage.miniMessage().deserialize("<!i>" + name);
         this.base64Texture = skin;
     }
+
 
     public void setSkullTexture(Block block) { // Think you can do this through the DataComponent API, but I'm in a rush to test this.
         Skull skull = (Skull) block.getState();
@@ -151,6 +152,10 @@ public class PlantType {
 
     @Override
     public String toString() {
+        return FIELD_NAME;
+    }
+
+    public String name() {
         return FIELD_NAME;
     }
 }

@@ -2,20 +2,27 @@ package dev.jsinco.brewery;
 
 import com.dre.brewery.api.addons.AddonInfo;
 import com.dre.brewery.api.addons.BreweryAddon;
+import com.dre.brewery.recipe.PluginItem;
+import dev.jsinco.brewery.constants.PlantType;
+import dev.jsinco.brewery.constants.PlantTypeSeeds;
 import dev.jsinco.brewery.events.EventListeners;
+import dev.jsinco.brewery.integration.BreweryGardenPluginItem;
 import dev.jsinco.brewery.objects.GardenManager;
 import dev.jsinco.brewery.objects.GardenPlant;
 import dev.jsinco.brewery.serdes.BreweryGardenSerdesPack;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AddonInfo(name = "BreweryGarden", version = "BX3.4.5-SNAPSHOT", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
-public class BreweryGarden extends BreweryAddon {
+public final class BreweryGarden extends BreweryAddon {
 
     // TODO: Brewery plugin item
-    // TODO: Runnable for growing plants
+    // TODO: Runnable for growing plants: DONE
     //TODO: Crafting recipe
     // TODO: Update BreweryX storage
     @Getter
@@ -29,12 +36,14 @@ public class BreweryGarden extends BreweryAddon {
     @Override
     public void onAddonEnable() {
         getAddonConfigManager().addSerdesPacks(new BreweryGardenSerdesPack());
+
         GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
-
-
         registerListener(new EventListeners(gardenManager));
-
         getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 50L);
+
+        PluginItem.registerForConfig("garden", BreweryGardenPluginItem::new);
+        PluginItem.registerForConfig("brewerygarden", BreweryGardenPluginItem::new);
+        this.registerPlantRecipes();
     }
 
     @Override
@@ -42,6 +51,27 @@ public class BreweryGarden extends BreweryAddon {
         GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
         gardenManager.save();
     }
+
+    @Override
+    public void onBreweryReload() {
+        getAddonConfigManager().getConfig(BreweryGardenConfig.class).reload();
+    }
+
+
+    private void registerPlantRecipes() {
+        for (PlantTypeSeeds plantTypeSeeds : PlantTypeSeeds.values()) {
+            PlantType plantType = plantTypeSeeds.getParent();
+            NamespacedKey namespacedKey = new NamespacedKey(getBreweryPlugin(), plantType.name());
+            if (Bukkit.getRecipe(namespacedKey) != null) {
+                Bukkit.removeRecipe(namespacedKey);
+            }
+
+            ShapelessRecipe recipe = new ShapelessRecipe(namespacedKey, plantTypeSeeds.getItemStack(4));
+            recipe.addIngredient(plantType.getItemStack(1));
+            Bukkit.addRecipe(recipe);
+        }
+    }
+
 
     public static class PlantGrowthRunnable implements Runnable {
 

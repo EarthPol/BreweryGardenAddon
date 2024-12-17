@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class PlantTypeSeeds {
+public final class PlantTypeSeeds {
 
 
     public static final PlantTypeSeeds BERRY_SEEDS = new PlantTypeSeeds(PlantType.BERRY, Material.MELON_SEEDS);
