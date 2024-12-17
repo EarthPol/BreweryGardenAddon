@@ -32,7 +32,7 @@ import static dev.jsinco.brewery.utility.PlayerSkinUtil.fromHashCode;
 
 
 @Getter
-public final class PlantType {
+public final class PlantType extends GenericPlantType {
 
     // TODO: get some plant base64 textures
     public static final PlantType BERRY = new PlantType(
@@ -87,6 +87,7 @@ public final class PlantType {
     }
 
     @SuppressWarnings("UnstableApiUsage")
+    @Override
     public ItemStack getItemStack(int amount) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD, amount);
         item.setData(DataComponentTypes.CUSTOM_NAME, name);
@@ -155,6 +156,7 @@ public final class PlantType {
         return FIELD_NAME;
     }
 
+    @Override
     public String name() {
         return FIELD_NAME;
     }

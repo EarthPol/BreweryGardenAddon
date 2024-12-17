@@ -41,7 +41,6 @@ public final class BreweryGarden extends BreweryAddon {
         getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L); // 5 minutes
 
         PluginItem.registerForConfig("garden", BreweryGardenPluginItem::new);
-        PluginItem.registerForConfig("brewerygarden", BreweryGardenPluginItem::new);
         this.registerPlantRecipes();
     }
 

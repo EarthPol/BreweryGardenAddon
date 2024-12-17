@@ -3,11 +3,19 @@ package dev.jsinco.brewery.configuration;
 import com.dre.brewery.api.addons.AddonConfigFile;
 import com.dre.brewery.configuration.annotation.OkaeriConfigFileOptions;
 import com.dre.brewery.depend.okaeri.configs.annotation.Comment;
+import com.dre.brewery.depend.okaeri.configs.annotation.Header;
 import lombok.Getter;
 import org.bukkit.Material;
 
 import java.util.List;
 
+@Header({
+        "Welcome to the configuration file for the BreweryGarden addon!",
+        "The settings below is all you're able to customize. If you'd like to request a feature",
+        "or report a bug, join our Discord or make an issue on our Github! https://brewery.lumamc.net/",
+        "To add a BreweryGarden item (plant or seeds), use 'Garden:Berry' or 'Garden:Berry_Seeds'.",
+        "To see all available PlantTypes, have a look here: https://github.com/BreweryTeam/BreweryGardenAddon/blob/master/src/main/java/dev/jsinco/brewery/constants/PlantType.java#L38"
+})
 @Getter
 @OkaeriConfigFileOptions("gardenConfig.yml")
 public class BreweryGardenConfig extends AddonConfigFile {

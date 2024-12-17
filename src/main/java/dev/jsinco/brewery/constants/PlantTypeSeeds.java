@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public final class PlantTypeSeeds {
+public final class PlantTypeSeeds extends GenericPlantType {
 
 
     public static final PlantTypeSeeds BERRY_SEEDS = new PlantTypeSeeds(PlantType.BERRY, Material.MELON_SEEDS);
@@ -54,6 +54,7 @@ public final class PlantTypeSeeds {
 
 
     @SuppressWarnings("UnstableApiUsage")
+    @Override
     public ItemStack getItemStack(int amount) {
         ItemStack item = new ItemStack(this.seedMaterial, amount);
         item.setData(DataComponentTypes.ITEM_NAME, name);
@@ -109,6 +110,11 @@ public final class PlantTypeSeeds {
 
     @Override
     public String toString() {
+        return FIELD_NAME;
+    }
+
+    @Override
+    public String name() {
         return FIELD_NAME;
     }
 }
