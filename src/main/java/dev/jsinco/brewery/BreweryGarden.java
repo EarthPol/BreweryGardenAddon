@@ -34,6 +34,12 @@ public final class BreweryGarden extends BreweryAddon {
 
     @Override
     public void onAddonEnable() {
+        if (!this.isPaper()) {
+            getAddonLogger().severe("This addon can only be run on Paper 1.21.3+");
+            getAddonManager().unloadAddon(this);
+            return;
+        }
+
         getAddonConfigManager().addSerdesPacks(new BreweryGardenSerdesPack());
 
         GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
