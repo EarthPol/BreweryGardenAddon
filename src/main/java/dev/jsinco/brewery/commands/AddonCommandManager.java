@@ -6,6 +6,7 @@ import com.dre.brewery.configuration.files.Lang;
 import com.dre.brewery.utility.Logging;
 import dev.jsinco.brewery.BreweryGarden;
 import dev.jsinco.brewery.commands.subcomands.GiveCommand;
+import dev.jsinco.brewery.commands.subcomands.IsPlantCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,7 @@ public class AddonCommandManager implements AddonCommand {
     private final Map<String, AddonSubCommand> subCommands = new HashMap<>();
     {
         subCommands.put("give", new GiveCommand());
+        subCommands.put("isplant", new IsPlantCommand());
     }
 
     @Override

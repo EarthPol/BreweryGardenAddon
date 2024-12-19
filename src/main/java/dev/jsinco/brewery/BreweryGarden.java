@@ -4,7 +4,6 @@ import com.dre.brewery.api.addons.AddonInfo;
 import com.dre.brewery.api.addons.BreweryAddon;
 import com.dre.brewery.recipe.PluginItem;
 import dev.jsinco.brewery.commands.AddonCommandManager;
-import dev.jsinco.brewery.configuration.BreweryGardenConfig;
 import dev.jsinco.brewery.constants.PlantType;
 import dev.jsinco.brewery.constants.PlantTypeSeeds;
 import dev.jsinco.brewery.events.EventListeners;
@@ -28,6 +27,8 @@ public final class BreweryGarden extends BreweryAddon {
 
     @Getter
     private static BreweryGarden instance;
+    @Getter
+    private static GardenManager gardenManager;
 
     @Override
     public void onAddonPreEnable() {
@@ -44,7 +45,7 @@ public final class BreweryGarden extends BreweryAddon {
 
         getAddonConfigManager().addSerdesPacks(new BreweryGardenSerdesPack());
 
-        GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
+        gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
         registerListener(new EventListeners(gardenManager));
         registerCommand("garden", new AddonCommandManager());
         getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L); // 5 minutes
@@ -61,7 +62,7 @@ public final class BreweryGarden extends BreweryAddon {
 
     @Override
     public void onBreweryReload() {
-        getAddonConfigManager().getConfig(BreweryGardenConfig.class).reload();
+        gardenManager.reload();
     }
 
 
