@@ -3,6 +3,7 @@ package dev.jsinco.brewery;
 import com.dre.brewery.api.addons.AddonInfo;
 import com.dre.brewery.api.addons.BreweryAddon;
 import com.dre.brewery.recipe.PluginItem;
+import dev.jsinco.brewery.commands.AddonCommandManager;
 import dev.jsinco.brewery.configuration.BreweryGardenConfig;
 import dev.jsinco.brewery.constants.PlantType;
 import dev.jsinco.brewery.constants.PlantTypeSeeds;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @AddonInfo(name = "BreweryGarden", version = "BX3.4.5-SNAPSHOT", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
 public final class BreweryGarden extends BreweryAddon {
@@ -44,6 +46,7 @@ public final class BreweryGarden extends BreweryAddon {
 
         GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
         registerListener(new EventListeners(gardenManager));
+        registerCommand("garden", new AddonCommandManager());
         getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L); // 5 minutes
 
         PluginItem.registerForConfig("garden", BreweryGardenPluginItem::new);
@@ -80,6 +83,7 @@ public final class BreweryGarden extends BreweryAddon {
     public static class PlantGrowthRunnable implements Runnable {
 
         private final GardenManager gardenManager;
+        private final Random random = new Random();
 
         public PlantGrowthRunnable(GardenManager gardenManager) {
             this.gardenManager = gardenManager;
@@ -89,7 +93,10 @@ public final class BreweryGarden extends BreweryAddon {
         public void run() {
             List<GardenPlant> toRemove = new ArrayList<>(); // dont concurrently modify
             gardenManager.getGardenPlants().forEach(gardenPlant -> {
-                gardenPlant.incrementGrowthStage(1);
+                if (random.nextInt(100) > 20) {
+                    gardenPlant.incrementGrowthStage(1);
+                }
+
                 if (gardenPlant.isFullyGrown()) {
                     if (gardenPlant.isValid()) {
                         gardenPlant.place();

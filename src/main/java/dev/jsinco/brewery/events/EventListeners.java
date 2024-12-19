@@ -61,7 +61,7 @@ public class EventListeners implements Listener {
         }
 
         Logging.debugLog("Found a GardenPlant at Location for BlockBreak: " + block.getLocation());
-        // #isValid won't work here. Block's material type won't update until after this event has finished firing.
+        // GardenPlant#isValid won't work here. Block's material type won't update until after this event has finished firing.
         if (block.getType() != Material.PLAYER_HEAD) { // Just gonna do this for now
             gardenManager.removePlant(gardenPlant);
         }
