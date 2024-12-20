@@ -1,9 +1,9 @@
-package dev.jsinco.brewery.integration;
+package dev.jsinco.brewery.garden.integration;
 
 import com.dre.brewery.recipe.PluginItem;
-import dev.jsinco.brewery.constants.GenericPlantType;
-import dev.jsinco.brewery.constants.PlantType;
-import dev.jsinco.brewery.constants.PlantTypeSeeds;
+import dev.jsinco.brewery.garden.constants.GenericPlantType;
+import dev.jsinco.brewery.garden.constants.PlantType;
+import dev.jsinco.brewery.garden.constants.PlantTypeSeeds;
 import org.bukkit.inventory.ItemStack;
 
 public final class BreweryGardenPluginItem extends PluginItem {

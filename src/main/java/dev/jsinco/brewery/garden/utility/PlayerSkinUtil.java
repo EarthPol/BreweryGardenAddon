@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.utility;
+package dev.jsinco.brewery.garden.utility;
 
 import javax.annotation.Nonnull;
 import java.nio.charset.StandardCharsets;

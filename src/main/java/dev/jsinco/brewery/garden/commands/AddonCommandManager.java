@@ -1,12 +1,12 @@
-package dev.jsinco.brewery.commands;
+package dev.jsinco.brewery.garden.commands;
 
 import com.dre.brewery.BreweryPlugin;
 import com.dre.brewery.api.addons.AddonCommand;
 import com.dre.brewery.configuration.files.Lang;
 import com.dre.brewery.utility.Logging;
-import dev.jsinco.brewery.BreweryGarden;
-import dev.jsinco.brewery.commands.subcomands.GiveCommand;
-import dev.jsinco.brewery.commands.subcomands.IsPlantCommand;
+import dev.jsinco.brewery.garden.BreweryGarden;
+import dev.jsinco.brewery.garden.commands.subcomands.GiveCommand;
+import dev.jsinco.brewery.garden.commands.subcomands.IsPlantCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

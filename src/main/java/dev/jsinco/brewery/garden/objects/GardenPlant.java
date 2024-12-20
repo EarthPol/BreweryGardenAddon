@@ -1,10 +1,10 @@
-package dev.jsinco.brewery.objects;
+package dev.jsinco.brewery.garden.objects;
 
 import com.dre.brewery.utility.Logging;
-import dev.jsinco.brewery.BreweryGarden;
-import dev.jsinco.brewery.configuration.BreweryGardenConfig;
-import dev.jsinco.brewery.constants.PlantPart;
-import dev.jsinco.brewery.constants.PlantType;
+import dev.jsinco.brewery.garden.BreweryGarden;
+import dev.jsinco.brewery.garden.configuration.BreweryGardenConfig;
+import dev.jsinco.brewery.garden.constants.PlantPart;
+import dev.jsinco.brewery.garden.constants.PlantType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,7 +70,8 @@ public class GardenPlant {
 
             block.setType(plantPart.getAssigneeMaterial());
             if (block.getBlockData() instanceof Leaves leaves) {
-                leaves.setPersistent(true); // Either this doesn't work or it has a misleading name
+                leaves.setPersistent(true);
+                block.setBlockData(leaves);
             }
             if (plantPart.getAssigneeMaterial() == Material.PLAYER_HEAD) {
                 type.setSkullTexture(block);

@@ -1,7 +1,7 @@
-package dev.jsinco.brewery.constants;
+package dev.jsinco.brewery.garden.constants;
 
 import com.dre.brewery.BreweryPlugin;
-import dev.jsinco.brewery.BreweryGarden;
+import dev.jsinco.brewery.garden.BreweryGarden;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -29,6 +29,10 @@ public final class PlantTypeSeeds extends GenericPlantType {
     public static final PlantTypeSeeds ORANGE_SEEDS = new PlantTypeSeeds(PlantType.ORANGE, Material.NETHER_WART);
     public static final PlantTypeSeeds GRAPE_SEEDS = new PlantTypeSeeds(PlantType.GRAPE, Material.COCOA_BEANS);
     public static final PlantTypeSeeds APPLE_SEEDS = new PlantTypeSeeds(PlantType.APPLE, Material.SWEET_BERRIES);
+    public static final PlantTypeSeeds PEACH_SEEDS = new PlantTypeSeeds(PlantType.PEACH, Material.PUMPKIN_SEEDS);
+    public static final PlantTypeSeeds CRANBERRY_SEEDS = new PlantTypeSeeds(PlantType.CRANBERRY, Material.MELON_SEEDS);
+    public static final PlantTypeSeeds BLUEBERRY_SEEDS = new PlantTypeSeeds(PlantType.BLUEBERRY, Material.MELON_SEEDS);
+    public static final PlantTypeSeeds CHERRY_SEEDS = new PlantTypeSeeds(PlantType.CHERRY, Material.MELON_SEEDS);
 
 
 

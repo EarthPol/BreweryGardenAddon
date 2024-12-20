@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "dev.jsinco.brewery"
+group = "dev.jsinco.brewery.garden"
 version = "BX3.4.5-SNAPSHOT"
 
 repositories {
@@ -12,10 +12,7 @@ repositories {
 }
 
 dependencies {
-    // Include the latest release of BreweryX instead of this version.
-    compileOnly("com.dre.brewery:BreweryX:3.4.5-SNAPSHOT#2")
-
-    // We need to include our own copy of whatever server software we're writing against!
+    compileOnly("com.dre.brewery:BreweryX:3.4.5-SNAPSHOT#4")
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.30")

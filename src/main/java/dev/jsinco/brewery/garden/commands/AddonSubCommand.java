@@ -1,6 +1,6 @@
-package dev.jsinco.brewery.commands;
+package dev.jsinco.brewery.garden.commands;
 
-import dev.jsinco.brewery.BreweryGarden;
+import dev.jsinco.brewery.garden.BreweryGarden;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;

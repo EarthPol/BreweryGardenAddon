@@ -1,13 +1,13 @@
-package dev.jsinco.brewery.events;
+package dev.jsinco.brewery.garden.events;
 
 import com.dre.brewery.utility.Logging;
-import dev.jsinco.brewery.BreweryGarden;
-import dev.jsinco.brewery.configuration.BreweryGardenConfig;
-import dev.jsinco.brewery.constants.PlantPart;
-import dev.jsinco.brewery.constants.PlantType;
-import dev.jsinco.brewery.constants.PlantTypeSeeds;
-import dev.jsinco.brewery.objects.GardenManager;
-import dev.jsinco.brewery.objects.GardenPlant;
+import dev.jsinco.brewery.garden.BreweryGarden;
+import dev.jsinco.brewery.garden.GardenManager;
+import dev.jsinco.brewery.garden.configuration.BreweryGardenConfig;
+import dev.jsinco.brewery.garden.constants.PlantPart;
+import dev.jsinco.brewery.garden.constants.PlantType;
+import dev.jsinco.brewery.garden.constants.PlantTypeSeeds;
+import dev.jsinco.brewery.garden.objects.GardenPlant;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -62,9 +62,12 @@ public class EventListeners implements Listener {
 
         Logging.debugLog("Found a GardenPlant at Location for BlockBreak: " + block.getLocation());
         // GardenPlant#isValid won't work here. Block's material type won't update until after this event has finished firing.
-        if (block.getType() != Material.PLAYER_HEAD) { // Just gonna do this for now
-            gardenManager.removePlant(gardenPlant);
+        if (block.getType() == Material.PLAYER_HEAD) { // Just gonna do this for now
+            Logging.msg(event.getPlayer(), "&rThis plant needs to be interacted with &6shears &rto be obtained.");
+            event.setCancelled(true);
+            return;
         }
+        gardenManager.removePlant(gardenPlant);
     }
 
     // TODO: I'm not going to put debug statements, gonna need IJ debugger for this test
@@ -101,6 +104,7 @@ public class EventListeners implements Listener {
             return;
         }
         gardenPlant.resetGrowthStage(true);
+        clickedLocation.getWorld().playSound(clickedLocation, Sound.ENTITY_SHEEP_SHEAR, 1.0f, 1.0f);
     }
 
     private boolean handleSeedPlacement(ItemStack itemInHand, Block clickedBlock) {
@@ -118,8 +122,8 @@ public class EventListeners implements Listener {
         GardenPlant gardenPlant = new GardenPlant(seeds.getParent(), location);
         gardenManager.addPlant(gardenPlant);
 
-        location.getWorld().playSound(location, Sound.BLOCK_GRASS_PLACE, 1.0f, 1.0f);
         itemInHand.setAmount(itemInHand.getAmount() - 1);
+        location.getWorld().playSound(location, Sound.BLOCK_GRASS_PLACE, 1.0f, 1.0f);
         return true;
     }
 }

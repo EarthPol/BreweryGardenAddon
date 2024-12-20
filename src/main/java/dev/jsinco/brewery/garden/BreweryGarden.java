@@ -1,16 +1,14 @@
-package dev.jsinco.brewery;
+package dev.jsinco.brewery.garden;
 
 import com.dre.brewery.api.addons.AddonInfo;
 import com.dre.brewery.api.addons.BreweryAddon;
 import com.dre.brewery.recipe.PluginItem;
-import dev.jsinco.brewery.commands.AddonCommandManager;
-import dev.jsinco.brewery.constants.PlantType;
-import dev.jsinco.brewery.constants.PlantTypeSeeds;
-import dev.jsinco.brewery.events.EventListeners;
-import dev.jsinco.brewery.integration.BreweryGardenPluginItem;
-import dev.jsinco.brewery.objects.GardenManager;
-import dev.jsinco.brewery.objects.GardenPlant;
-import dev.jsinco.brewery.serdes.BreweryGardenSerdesPack;
+import dev.jsinco.brewery.garden.commands.AddonCommandManager;
+import dev.jsinco.brewery.garden.constants.PlantType;
+import dev.jsinco.brewery.garden.constants.PlantTypeSeeds;
+import dev.jsinco.brewery.garden.events.EventListeners;
+import dev.jsinco.brewery.garden.integration.BreweryGardenPluginItem;
+import dev.jsinco.brewery.garden.objects.GardenPlant;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -33,6 +31,7 @@ public final class BreweryGarden extends BreweryAddon {
     @Override
     public void onAddonPreEnable() {
         instance = this;
+        PluginItem.registerForConfig("garden", BreweryGardenPluginItem::new);
     }
 
     @Override
@@ -43,26 +42,20 @@ public final class BreweryGarden extends BreweryAddon {
             return;
         }
 
-        getAddonConfigManager().addSerdesPacks(new BreweryGardenSerdesPack());
-
-        gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
+        gardenManager = new GardenManager(getDataManager());
         registerListener(new EventListeners(gardenManager));
         registerCommand("garden", new AddonCommandManager());
         getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L); // 5 minutes
-
-        PluginItem.registerForConfig("garden", BreweryGardenPluginItem::new);
         this.registerPlantRecipes();
     }
 
     @Override
     public void onAddonDisable() {
-        GardenManager gardenManager = getAddonConfigManager().getConfig(GardenManager.class);
-        gardenManager.save();
     }
 
     @Override
     public void onBreweryReload() {
-        gardenManager.reload();
+
     }
 
 
@@ -94,7 +87,9 @@ public final class BreweryGarden extends BreweryAddon {
         public void run() {
             List<GardenPlant> toRemove = new ArrayList<>(); // dont concurrently modify
             gardenManager.getGardenPlants().forEach(gardenPlant -> {
-                if (random.nextInt(100) > 20) {
+                if (!gardenPlant.isValid()) {
+                    toRemove.add(gardenPlant);
+                } else if (random.nextInt(100) > 20) {
                     gardenPlant.incrementGrowthStage(1);
                 }
 
@@ -107,7 +102,6 @@ public final class BreweryGarden extends BreweryAddon {
                 }
             });
             toRemove.forEach(gardenManager::removePlant);
-            gardenManager.saveAsync();
         }
     }
 }

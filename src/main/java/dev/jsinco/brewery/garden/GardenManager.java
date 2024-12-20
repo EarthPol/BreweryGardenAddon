@@ -1,9 +1,10 @@
-package dev.jsinco.brewery.objects;
+package dev.jsinco.brewery.garden;
 
-import com.dre.brewery.api.addons.AddonConfigFile;
-import com.dre.brewery.configuration.annotation.OkaeriConfigFileOptions;
-import com.dre.brewery.depend.okaeri.configs.annotation.Comment;
+import com.dre.brewery.storage.DataManager;
 import com.dre.brewery.utility.Logging;
+import dev.jsinco.brewery.garden.objects.GardenPlant;
+import dev.jsinco.brewery.garden.persist.AutoSavableGardenPlant;
+import dev.jsinco.brewery.garden.persist.SerializableGardenPlant;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.block.Block;
@@ -15,13 +16,21 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@OkaeriConfigFileOptions("plants.yml")
-public class GardenManager extends AddonConfigFile {
+public class GardenManager {
 
-    // TODO: This is bad, but I haven't opened up BreweryX's DataManager for supporting generic objects and paths yet,
-    //  so it will have to do for now.
-    @Comment("Persistent data for BreweryGarden plants. Don't touch.")
     private List<GardenPlant> gardenPlants = new ArrayList<>();
+    private AutoSavableGardenPlant autoSavableInstance;
+
+    public GardenManager(DataManager dataManager) {
+        autoSavableInstance = new AutoSavableGardenPlant(this);
+
+
+        List<SerializableGardenPlant> serializableGardenPlants = dataManager.getAllGeneric("gardenplants", SerializableGardenPlant.class);
+        for (SerializableGardenPlant serializableGardenPlant : serializableGardenPlants) {
+            gardenPlants.add(serializableGardenPlant.toGardenPlant());
+        }
+        dataManager.registerAutoSavable(autoSavableInstance);
+    }
 
 
     @Nullable

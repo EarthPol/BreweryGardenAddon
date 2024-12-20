@@ -1,7 +1,8 @@
-package dev.jsinco.brewery.objects;
+package dev.jsinco.brewery.garden.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -33,9 +34,33 @@ public class WorldTiedBoundingBox extends BoundingBox {
         return bL;
     }
 
+    @Override
+    public String toString() {
+        return String.join(",",
+                getWorld().getName(),
+                String.valueOf(getMinX()),
+                String.valueOf(getMinY()),
+                String.valueOf(getMinZ()),
+                String.valueOf(getMaxX()),
+                String.valueOf(getMaxY()),
+                String.valueOf(getMaxZ())
+        );
+    }
+
 
     public static WorldTiedBoundingBox of(Location location, Location location2) {
         return new WorldTiedBoundingBox(location.getWorld(), location.getX(), location.getY(), location.getZ(), location2.getX(), location2.getY(), location2.getZ());
     }
 
+    public static WorldTiedBoundingBox fromString(String data) {
+        String[] split = data.split(",");
+        World world = Bukkit.getWorld(split[0]);
+        double x1 = Double.parseDouble(split[1]);
+        double y1 = Double.parseDouble(split[2]);
+        double z1 = Double.parseDouble(split[3]);
+        double x2 = Double.parseDouble(split[4]);
+        double y2 = Double.parseDouble(split[5]);
+        double z2 = Double.parseDouble(split[6]);
+        return new WorldTiedBoundingBox(world, x1, y1, z1, x2, y2, z2);
+    }
 }

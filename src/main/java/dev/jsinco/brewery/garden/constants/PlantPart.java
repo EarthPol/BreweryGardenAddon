@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.constants;
+package dev.jsinco.brewery.garden.constants;
 
 import lombok.Getter;
 import org.bukkit.Location;

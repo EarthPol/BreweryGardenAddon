@@ -1,4 +1,4 @@
-package dev.jsinco.brewery.configuration;
+package dev.jsinco.brewery.garden.configuration;
 
 import com.dre.brewery.api.addons.AddonConfigFile;
 import com.dre.brewery.configuration.annotation.OkaeriConfigFileOptions;
