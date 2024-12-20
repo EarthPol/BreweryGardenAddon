@@ -6,7 +6,9 @@ import com.dre.brewery.configuration.files.Lang;
 import com.dre.brewery.utility.Logging;
 import dev.jsinco.brewery.garden.BreweryGarden;
 import dev.jsinco.brewery.garden.commands.subcomands.GiveCommand;
+import dev.jsinco.brewery.garden.commands.subcomands.GrowthStageCommand;
 import dev.jsinco.brewery.garden.commands.subcomands.IsPlantCommand;
+import dev.jsinco.brewery.garden.configuration.BreweryGardenConfig;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,10 +18,12 @@ import java.util.Map;
 
 public class AddonCommandManager implements AddonCommand {
 
+    private final BreweryGardenConfig config = BreweryGarden.getInstance().getAddonConfigManager().getConfig(BreweryGardenConfig.class);
     private final Map<String, AddonSubCommand> subCommands = new HashMap<>();
     {
         subCommands.put("give", new GiveCommand());
         subCommands.put("isplant", new IsPlantCommand());
+        subCommands.put("growthstage", new GrowthStageCommand());
     }
 
     @Override
@@ -42,7 +46,7 @@ public class AddonCommandManager implements AddonCommand {
 
         String[] subArgs = new String[args.length - 2];
         System.arraycopy(args, 2, subArgs, 0, args.length - 2);
-        if (!subCommand.execute(BreweryGarden.getInstance(), sender, label, subArgs)) {
+        if (!subCommand.execute(BreweryGarden.getInstance(), config, sender, label, subArgs)) {
             Logging.msg(sender, subCommand.usage(label));
         }
     }
@@ -57,7 +61,9 @@ public class AddonCommandManager implements AddonCommand {
 
         AddonSubCommand subCommand = subCommands.get(args[1]);
         if (subCommand == null) return null;
-        return subCommand.tabComplete(BreweryGarden.getInstance(), sender, s, args);
+        String[] subArgs = new String[args.length - 2];
+        System.arraycopy(args, 2, subArgs, 0, args.length - 2);
+        return subCommand.tabComplete(BreweryGarden.getInstance(), sender, s, subArgs);
     }
 
     @Override

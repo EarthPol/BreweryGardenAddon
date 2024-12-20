@@ -1,8 +1,11 @@
 package dev.jsinco.brewery.garden.commands.subcomands;
 
+import com.dre.brewery.utility.BUtil;
 import com.dre.brewery.utility.Logging;
 import dev.jsinco.brewery.garden.BreweryGarden;
 import dev.jsinco.brewery.garden.commands.AddonSubCommand;
+import dev.jsinco.brewery.garden.configuration.BreweryGardenConfig;
+import dev.jsinco.brewery.garden.constants.GenericPlantType;
 import dev.jsinco.brewery.garden.constants.PlantType;
 import dev.jsinco.brewery.garden.constants.PlantTypeSeeds;
 import org.bukkit.Bukkit;
@@ -16,25 +19,30 @@ import java.util.Map;
 
 public class GiveCommand implements AddonSubCommand {
 
-    private final Map<String, ItemStack> items = new HashMap<>();
+    private final Map<String, GenericPlantType> items = new HashMap<>();
     {
         for (var plant : PlantType.values()) {
-            items.put(plant.name().toLowerCase(), plant.getItemStack(1));
+            items.put(plant.name().toLowerCase(), plant);
         }
         for (var seed : PlantTypeSeeds.values()) {
-            items.put(seed.name().toLowerCase(), seed.getItemStack(1));
+            items.put(seed.name().toLowerCase(), seed);
         }
     }
 
     @Override
-    public boolean execute(BreweryGarden addon, CommandSender sender, String label, String[] args) {
+    public boolean execute(BreweryGarden addon, BreweryGardenConfig config, CommandSender sender, String label, String[] args) {
         if (args.length == 0) {
             return false;
         }
 
-        Player player = null;
+        int amount = 1;
         if (args.length >= 2) {
-            player = Bukkit.getPlayerExact(args[1]);
+            amount = BUtil.parseInt(args[1]);
+        }
+
+        Player player = null;
+        if (args.length >= 3) {
+            player = Bukkit.getPlayerExact(args[2]);
         } else if (sender instanceof Player p) {
             player = p;
         }
@@ -43,10 +51,11 @@ public class GiveCommand implements AddonSubCommand {
             return false;
         }
 
-        ItemStack item = items.get(args[0].toLowerCase());
+        GenericPlantType plantType = items.get(args[0].toLowerCase());
+        ItemStack item = plantType.getItemStack(amount);
         if (item != null) {
             player.getInventory().addItem(item);
-            Logging.msg(sender, "Gave " + item.getType().name() + " to " + player.getName());
+            Logging.msg(sender, "Gave &6x" + amount + " " + plantType.name().toLowerCase() + " &rto " + player.getName());
         } else {
             Logging.msg(sender, "Unknown item.");
         }
@@ -55,7 +64,12 @@ public class GiveCommand implements AddonSubCommand {
 
     @Override
     public List<String> tabComplete(BreweryGarden addon, CommandSender sender, String label, String[] args) {
-        return items.keySet().stream().toList();
+        if (args.length == 1) {
+            return items.keySet().stream().toList();
+        } else if (args.length == 2) {
+            return List.of("1", "16", "24", "32", "48", "64");
+        }
+        return null;
     }
 
     @Override
@@ -70,6 +84,6 @@ public class GiveCommand implements AddonSubCommand {
 
     @Override
     public String usage(String label) {
-        return "&e/" + label + " give <item!> <player?>";
+        return "&e/" + label + "garden give <item!> <amount?> <player?>";
     }
 }

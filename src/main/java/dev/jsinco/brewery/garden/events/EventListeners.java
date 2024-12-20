@@ -62,9 +62,12 @@ public class EventListeners implements Listener {
 
         Logging.debugLog("Found a GardenPlant at Location for BlockBreak: " + block.getLocation());
         // GardenPlant#isValid won't work here. Block's material type won't update until after this event has finished firing.
+        Material itemMaterial = event.getPlayer().getInventory().getItemInMainHand().getType();
         if (block.getType() == Material.PLAYER_HEAD) { // Just gonna do this for now
-            Logging.msg(event.getPlayer(), "&rThis plant needs to be interacted with &6shears &rto be obtained.");
-            event.setCancelled(true);
+            if (itemMaterial != Material.SHEARS) {
+                Logging.msg(event.getPlayer(), "&rThis plant needs to be interacted with &6shears &rto be obtained.");
+                event.setCancelled(true);
+            }
             return;
         }
         gardenManager.removePlant(gardenPlant);
@@ -79,7 +82,7 @@ public class EventListeners implements Listener {
         }
 
         handlePlantShearing(event.getItem(), block);
-        if (event.getBlockFace() == BlockFace.UP && config.getPlantableBlocks().contains(block.getType())) {
+        if (event.getBlockFace() == BlockFace.UP && event.getAction().isRightClick() && config.getPlantableBlocks().contains(block.getType())) {
             event.setCancelled(handleSeedPlacement(event.getItem(), block));
         }
     }

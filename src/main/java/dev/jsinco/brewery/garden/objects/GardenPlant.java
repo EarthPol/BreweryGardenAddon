@@ -12,6 +12,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Leaves;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +76,7 @@ public class GardenPlant {
             }
             if (plantPart.getAssigneeMaterial() == Material.PLAYER_HEAD) {
                 type.setSkullTexture(block);
+                block.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, block.getLocation().toCenterLocation(), 5, 0.1, 0.1, 0.1);
             }
         }
         return true;
@@ -96,6 +98,11 @@ public class GardenPlant {
 
     public boolean unPlace() {
         for (Block block : region.getBlocks()) {
+            if (block.getType() == Material.AIR) {
+                continue;
+            } else if (block.getType() == Material.PLAYER_HEAD) {
+                block.getWorld().dropItemNaturally(block.getLocation(), this.type.getItemStack(RANDOM.nextInt(1, 4)));
+            }
             block.setType(Material.AIR);
         }
         return true;

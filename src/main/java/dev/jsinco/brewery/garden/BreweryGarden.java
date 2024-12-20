@@ -21,7 +21,10 @@ import java.util.Random;
 @AddonInfo(name = "BreweryGarden", version = "BX3.4.5-SNAPSHOT", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
 public final class BreweryGarden extends BreweryAddon {
 
-    // TODO: Update BreweryX storage system for generic object/sector support
+    // TODO:
+    //  I'd like to swap to a schematic based system for plants in this addon eventually.
+    //  Having fruit trees would be a really nice feature. Additionally, I want to expand the config
+    //  of this addon eventually.
 
     @Getter
     private static BreweryGarden instance;

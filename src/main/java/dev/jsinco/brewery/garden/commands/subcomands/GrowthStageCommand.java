@@ -12,34 +12,36 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class IsPlantCommand implements AddonSubCommand {
+public class GrowthStageCommand implements AddonSubCommand {
     @Override
     public boolean execute(BreweryGarden addon, BreweryGardenConfig config, CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        GardenManager gardenManager = BreweryGarden.getGardenManager();
 
-        int maxDistance = 30;
-        if (args.length > 0) {
-            maxDistance = BUtil.parseInt(args[0]);
+        int newGrowthStage = Math.min(BUtil.parseInt(args[0]), config.getFullyGrown());
+
+        GardenManager gardenManager = BreweryGarden.getGardenManager();
+        GardenPlant gardenPlant = gardenManager.getByLocation(player.getTargetBlockExact(30));
+
+        if (gardenPlant == null) {
+            Logging.msg(player, "No GardenPlant found.");
+            return true;
         }
 
-        GardenPlant gardenPlant = gardenManager.getByLocation(player.getTargetBlockExact(maxDistance));
-        if (gardenPlant != null) {
-            Logging.msg(player, "Found a GardenPlant: " + gardenPlant);
-        } else {
-            Logging.msg(player, "No GardenPlant found.");
+        gardenPlant.setAge(newGrowthStage);
+        if (gardenPlant.isFullyGrown()) {
+            gardenPlant.place();
         }
         return true;
     }
 
     @Override
     public List<String> tabComplete(BreweryGarden addon, CommandSender sender, String label, String[] args) {
-        return List.of("<distance>");
+        return List.of("1", "2", "3", "4");
     }
 
     @Override
     public String permission() {
-        return "brewery.cmd.garden.isplant";
+        return "brewery.cmd.garden.growthstage";
     }
 
     @Override
@@ -49,6 +51,6 @@ public class IsPlantCommand implements AddonSubCommand {
 
     @Override
     public String usage(String label) {
-        return "/" + label + "garden isplant <distance?>";
+        return "/" + label + "garden growthstage";
     }
 }

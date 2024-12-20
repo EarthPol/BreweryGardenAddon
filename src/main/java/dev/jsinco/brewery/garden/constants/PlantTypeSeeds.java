@@ -41,18 +41,17 @@ public final class PlantTypeSeeds extends GenericPlantType {
     private String FIELD_NAME; // Reflect
 
     private final PlantType parent;
-    private final Component name;
     private final Material seedMaterial;
 
     public PlantTypeSeeds(PlantType parent, String name, Material seedMaterial) {
+        super(MiniMessage.miniMessage().deserialize(name));
         this.parent = parent;
-        this.name = MiniMessage.miniMessage().deserialize(name);
         this.seedMaterial = seedMaterial;
     }
 
     public PlantTypeSeeds(PlantType parent, Material seedMaterial) {
+        super(parent.getName().append(Component.text(" Seeds")));
         this.parent = parent;
-        this.name = parent.getName().append(Component.text(" Seeds"));
         this.seedMaterial = seedMaterial;
     }
 

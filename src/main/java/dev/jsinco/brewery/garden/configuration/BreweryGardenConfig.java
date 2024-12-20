@@ -17,7 +17,7 @@ import java.util.List;
         "To see all available PlantTypes, have a look here: https://github.com/BreweryTeam/BreweryGardenAddon/blob/master/src/main/java/dev/jsinco/brewery/constants/PlantType.java#L38"
 })
 @Getter
-@OkaeriConfigFileOptions("gardenConfig.yml")
+@OkaeriConfigFileOptions("config.yml")
 public class BreweryGardenConfig extends AddonConfigFile {
 
     @Comment({"How likely it is for a seed to spawn from a broken 'validSeedDropBlocks' block.",

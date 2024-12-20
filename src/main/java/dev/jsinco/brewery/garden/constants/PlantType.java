@@ -9,7 +9,6 @@ import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import lombok.Getter;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -81,7 +80,7 @@ public final class PlantType extends GenericPlantType {
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI2OTdmM2VmOGY0NjI5YjY0NWZkMmU2NDQ2NDEzMjRhMWMxMTgzNTQ5OGU2MzhmNzU3ZjI3OGFmYmNlNWRiMSJ9fX0="
     );
     public static final PlantType CHERRY = new PlantType(
-            "<#d20a2e>Cherry",
+            "<#461a27>Cherry",
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGVlOTdhMDhhZDA1NGI4MDY4NGU3NmYxMzI5ZGRkMGIxZmEyNzNiMDY5OWVlODZiMjEzNzk3MDRmNzQ2OGNhIn19fQ=="
             //"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGI5YjIzODNiYWU3Yjg0ZmRjMzFiNTQxNzlhZmI3MTNhMWMxODdiODNlN2EwYzVlMzg0NzBhZTJhM2UyYTMwZiJ9fX0="
     );
@@ -93,11 +92,10 @@ public final class PlantType extends GenericPlantType {
 
     private String FIELD_NAME; // Reflect
 
-    private final Component name;
     private final String base64;
 
     private PlantType(String name, String skin) {
-        this.name = MiniMessage.miniMessage().deserialize("<!i>" + name);
+        super(MiniMessage.miniMessage().deserialize("<!i>" + name));
         this.base64 = skin;
     }
 
