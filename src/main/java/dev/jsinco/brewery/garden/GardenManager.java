@@ -23,13 +23,13 @@ public class GardenManager {
 
     public GardenManager(DataManager dataManager) {
         autoSavableInstance = new AutoSavableGardenPlant(this);
+        dataManager.registerAutoSavable(autoSavableInstance);
 
 
         List<SerializableGardenPlant> serializableGardenPlants = dataManager.getAllGeneric("gardenplants", SerializableGardenPlant.class);
         for (SerializableGardenPlant serializableGardenPlant : serializableGardenPlants) {
             gardenPlants.add(serializableGardenPlant.toGardenPlant());
         }
-        dataManager.registerAutoSavable(autoSavableInstance);
     }
 
 

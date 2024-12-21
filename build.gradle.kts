@@ -50,7 +50,7 @@ modrinth {
     versionType.set("release") // This is the default -- can also be `beta` or `alpha`
     uploadFile.set(tasks.jar)
     loaders.addAll("bukkit", "spigot", "paper", "purpur", "folia")
-    gameVersions.addAll("1.21.x")
+    gameVersions.addAll("1.21.4")
     changelog.set(readChangeLog())
 }
 
