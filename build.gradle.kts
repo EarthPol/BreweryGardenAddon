@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.jsinco.brewery.garden"
-version = "BX3.4.5"
+version = "BX3.4.5#2"
 
 repositories {
     mavenCentral()
@@ -36,7 +36,7 @@ hangarPublish {
         platforms {
             register(Platforms.PAPER) {
                 jar.set(tasks.jar.flatMap { it.archiveFile })
-                platformVersions.set(listOf("1.21.x"))
+                platformVersions.set(listOf("1.21.3", "1.21.4"))
             }
         }
         changelog.set(readChangeLog())
@@ -49,8 +49,8 @@ modrinth {
     versionNumber.set(project.version.toString())
     versionType.set("release") // This is the default -- can also be `beta` or `alpha`
     uploadFile.set(tasks.jar)
-    loaders.addAll("bukkit", "spigot", "paper", "purpur", "folia")
-    gameVersions.addAll("1.21.4")
+    loaders.addAll("paper", "purpur", "folia")
+    gameVersions.addAll("1.21.3", "1.21.4")
     changelog.set(readChangeLog())
 }
 
