@@ -66,11 +66,11 @@ public class EventListeners implements Listener {
         if (block.getType() == Material.PLAYER_HEAD) { // Just gonna do this for now
             if (itemMaterial != Material.SHEARS) {
                 Logging.msg(event.getPlayer(), "&rThis plant needs to be interacted with &6shears &rto be obtained.");
-                event.setCancelled(true);
             }
-            return;
+            event.setCancelled(true);
+        } else {
+            gardenManager.removePlant(gardenPlant);
         }
-        gardenManager.removePlant(gardenPlant);
     }
 
     // TODO: I'm not going to put debug statements, gonna need IJ debugger for this test

@@ -112,7 +112,7 @@ public final class PlantType extends GenericPlantType {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD, amount);
         item.setData(DataComponentTypes.CUSTOM_NAME, name);
         item.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(this.getPlayerProfile()));
-        item.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().build());
+        item.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().hasConsumeParticles(false).build());
         item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(3).saturation(2.0f).build());
 
         // TODO: Ask in Paper discord how to use PDC with new ItemMeta API
