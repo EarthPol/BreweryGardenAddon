@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.jsinco.brewery.garden"
-version = "BX3.4.5#2"
+version = "BX3.4.5-RV2"
 
 repositories {
     mavenCentral()

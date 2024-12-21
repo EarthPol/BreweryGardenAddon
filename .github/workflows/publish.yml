@@ -34,4 +34,4 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CHANGELOG: ${{ github.event.release.body }}
         with:
-          arguments: build modrinth --stacktrace
+          arguments: modrinth --stacktrace
