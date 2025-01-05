@@ -9,6 +9,8 @@ import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -33,7 +35,6 @@ import static dev.jsinco.brewery.garden.utility.PlayerSkinUtil.fromHashCode;
 @Getter
 public final class PlantType extends GenericPlantType {
 
-    // TODO: get some plant base64 textures
     public static final PlantType BERRY = new PlantType(
             "<dark_purple>Berry",
             fromHashCode("1e4883a1e22c324e753151e2ac424c74f1cc646eec8ea0db3420f1dd1d8b")
@@ -117,9 +118,27 @@ public final class PlantType extends GenericPlantType {
 
         // TODO: Ask in Paper discord how to use PDC with new ItemMeta API
         ItemMeta meta = item.getItemMeta();
+        meta.lore(List.of(Component.text("A sweet fruit").color(NamedTextColor.DARK_GRAY)));
         meta.getPersistentDataContainer().set(PERSISTENT_DATA_KEY, PersistentDataType.STRING, FIELD_NAME);
         item.setItemMeta(meta);
         return item;
+    }
+
+    public void setDataOnPlayerSkullBlock(Block block) {
+        if (block.getType() != Material.PLAYER_HEAD) {
+            return;
+        }
+        Skull skull = (Skull) block.getState();
+        skull.getPersistentDataContainer().set(PERSISTENT_DATA_KEY, PersistentDataType.STRING, FIELD_NAME);
+        skull.update();
+    }
+
+    public static boolean isPlayerSkullBlock(Block block) {
+        if (block.getType() != Material.PLAYER_HEAD) {
+            return false;
+        }
+        Skull skull = (Skull) block.getState();
+        return skull.getPersistentDataContainer().has(PERSISTENT_DATA_KEY);
     }
 
     private PlayerProfile getPlayerProfile() {
@@ -139,6 +158,15 @@ public final class PlantType extends GenericPlantType {
     public static PlantType getPlantType(ItemStack item) {
         if (!isPlant(item)) return null;
         String field_name = item.getItemMeta().getPersistentDataContainer().get(PERSISTENT_DATA_KEY, PersistentDataType.STRING);
+        if (field_name == null) return null;
+        return valueOf(field_name);
+    }
+
+    @Nullable
+    public static PlantType getPlantType(Block block) {
+        if (block.getType() != Material.PLAYER_HEAD) return null;
+        Skull skull = (Skull) block.getState();
+        String field_name = skull.getPersistentDataContainer().get(PERSISTENT_DATA_KEY, PersistentDataType.STRING);
         if (field_name == null) return null;
         return valueOf(field_name);
     }

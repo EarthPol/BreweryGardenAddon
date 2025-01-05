@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.jsinco.brewery.garden"
-version = "BX3.4.5-RV2"
+version = "BX3.4.6"
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.dre.brewery:BreweryX:3.4.5-SNAPSHOT#4")
+    compileOnly("com.dre.brewery:BreweryX:3.4.6")
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.30")

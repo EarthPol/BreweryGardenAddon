@@ -53,6 +53,10 @@ public class EventListeners implements Listener {
             // Drop a seed
             block.getWorld().dropItemNaturally(block.getLocation(),
                     seedsList.get(RANDOM.nextInt(seedsList.size())).getItemStack(1));
+        } else if (PlantType.isPlayerSkullBlock(block)) {
+            PlantType plantType = PlantType.getPlantType(block);
+            event.setDropItems(false);
+            block.getWorld().dropItemNaturally(block.getLocation(), plantType.getItemStack(1));
         }
 
         GardenPlant gardenPlant = gardenManager.getByLocation(block);
@@ -90,7 +94,8 @@ public class EventListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (PlantType.isPlant(event.getItemInHand())) {
-            event.setCancelled(true);
+            PlantType plantType = PlantType.getPlantType(event.getItemInHand());
+            plantType.setDataOnPlayerSkullBlock(event.getBlock());
         }
     }
 

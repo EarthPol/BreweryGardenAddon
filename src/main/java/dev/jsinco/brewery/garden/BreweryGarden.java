@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@AddonInfo(name = "BreweryGarden", version = "BX3.4.5", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
+@AddonInfo(name = "BreweryGarden", version = "BX3.4.6", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
 public final class BreweryGarden extends BreweryAddon {
 
     // TODO:

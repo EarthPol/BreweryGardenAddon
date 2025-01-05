@@ -5,6 +5,7 @@ import dev.jsinco.brewery.garden.BreweryGarden;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -64,6 +65,7 @@ public final class PlantTypeSeeds extends GenericPlantType {
 
         // TODO: Ask in Paper discord how to use PDC with new ItemMeta API
         ItemMeta meta = item.getItemMeta();
+        meta.lore(List.of(Component.text("Rough seeds").color(NamedTextColor.DARK_GRAY)));
         meta.getPersistentDataContainer().set(PERSISTENT_DATA_KEY, PersistentDataType.STRING, FIELD_NAME);
         item.setItemMeta(meta);
         return item;
