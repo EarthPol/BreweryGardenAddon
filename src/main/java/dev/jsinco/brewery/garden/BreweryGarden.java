@@ -1,8 +1,10 @@
 package dev.jsinco.brewery.garden;
 
+import com.dre.brewery.BreweryPlugin;
 import com.dre.brewery.api.addons.AddonInfo;
 import com.dre.brewery.api.addons.BreweryAddon;
 import com.dre.brewery.recipe.PluginItem;
+import com.dre.brewery.utility.MinecraftVersion;
 import dev.jsinco.brewery.garden.commands.AddonCommandManager;
 import dev.jsinco.brewery.garden.constants.PlantType;
 import dev.jsinco.brewery.garden.constants.PlantTypeSeeds;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@AddonInfo(name = "BreweryGarden", version = "BX3.4.6", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
+@AddonInfo(name = "BreweryGarden", version = "BX3.4.7", author = "Jsinco", description = "Adds plants to BreweryX, lightweight ExoticGarden.")
 public final class BreweryGarden extends BreweryAddon {
 
     // TODO:
@@ -39,7 +41,7 @@ public final class BreweryGarden extends BreweryAddon {
 
     @Override
     public void onAddonEnable() {
-        if (!this.isPaper()) {
+        if (!this.isPaper() || !BreweryPlugin.getMCVersion().isOrLater(MinecraftVersion.V1_21)) {
             getAddonLogger().severe("This addon can only be run on Paper 1.21.3+");
             getAddonManager().unloadAddon(this);
             return;
