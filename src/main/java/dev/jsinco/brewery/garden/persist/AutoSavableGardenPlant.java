@@ -4,6 +4,7 @@ import com.dre.brewery.storage.DataManager;
 import com.dre.brewery.storage.interfaces.ExternallyAutoSavable;
 import dev.jsinco.brewery.garden.GardenManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutoSavableGardenPlant implements ExternallyAutoSavable {
@@ -21,8 +22,11 @@ public class AutoSavableGardenPlant implements ExternallyAutoSavable {
 
     @Override
     public void onAutoSave(DataManager dataManager) {
-        List<SerializableGardenPlant> serializableGardenPlants = gardenManager.getGardenPlants()
-                .stream().map(SerializableGardenPlant::new).toList();
+        List<SerializableGardenPlant> serializableGardenPlants = new ArrayList<>();
+        gardenManager.getGardenPlants().forEach(gardenPlant -> {
+            SerializableGardenPlant serializableGardenPlant = new SerializableGardenPlant(gardenPlant);
+            serializableGardenPlants.add(serializableGardenPlant);
+        });
         dataManager.saveAllGeneric(serializableGardenPlants, this.table(), true, SerializableGardenPlant.class);
     }
 }
