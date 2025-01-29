@@ -33,4 +33,7 @@ public class BreweryGardenConfig extends AddonConfigFile {
 
     @Comment("A list of materials which a seed may be planted on.")
     private List<Material> plantableBlocks = List.of(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL);
+
+    @Comment("A list of worlds where the BreweryGarden addon is disabled.")
+    private List<String> blacklistedWorlds = List.of("resource", "resource_nether");
 }

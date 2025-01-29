@@ -32,6 +32,7 @@ public final class BreweryGarden extends BreweryAddon {
     private static BreweryGarden instance;
     @Getter
     private static GardenManager gardenManager;
+    private static int taskID;
 
     @Override
     public void onAddonPreEnable() {
@@ -50,12 +51,15 @@ public final class BreweryGarden extends BreweryAddon {
         gardenManager = new GardenManager(getDataManager());
         registerListener(new EventListeners(gardenManager));
         registerCommand("garden", new AddonCommandManager());
-        getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L); // 5 minutes
+        taskID = getScheduler().runTaskTimer(new PlantGrowthRunnable(gardenManager), 1L, 6000L).getTaskId(); // 5 minutes
         this.registerPlantRecipes();
     }
 
     @Override
     public void onAddonDisable() {
+        unregisterListeners();
+        unregisterCommands();
+        Bukkit.getScheduler().cancelTask(taskID);
     }
 
     @Override

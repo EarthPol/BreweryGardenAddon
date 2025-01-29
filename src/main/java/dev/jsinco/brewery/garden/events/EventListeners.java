@@ -39,6 +39,9 @@ public class EventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onLeafDecay(LeavesDecayEvent event) {
+        if (isBlacklistedWorld(event.getBlock().getLocation())) {
+            return;
+        }
         GardenPlant gardenPlant = gardenManager.getByLocation(event.getBlock());
         if (gardenPlant != null) {
             event.setCancelled(true);
@@ -47,6 +50,9 @@ public class EventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (isBlacklistedWorld(event.getBlock().getLocation())) {
+            return;
+        }
         Block block = event.getBlock();
         if (config.getValidSeedDropBlocks().contains(block.getType()) && RANDOM.nextInt(100) <= config.getSeedSpawnChance()) {
             List<PlantTypeSeeds> seedsList = PlantTypeSeeds.values();
@@ -81,7 +87,7 @@ public class EventListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
-        if (block == null) {
+        if (block == null || isBlacklistedWorld(block.getLocation())) {
             return;
         }
 
@@ -93,6 +99,9 @@ public class EventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
+        if (isBlacklistedWorld(event.getBlock().getLocation())) {
+            return;
+        }
         if (PlantType.isPlant(event.getItemInHand())) {
             PlantType plantType = PlantType.getPlantType(event.getItemInHand());
             plantType.setDataOnPlayerSkullBlock(event.getBlock());
@@ -133,5 +142,10 @@ public class EventListeners implements Listener {
         itemInHand.setAmount(itemInHand.getAmount() - 1);
         location.getWorld().playSound(location, Sound.BLOCK_GRASS_PLACE, 1.0f, 1.0f);
         return true;
+    }
+
+
+    private boolean isBlacklistedWorld(Location location) {
+        return config.getBlacklistedWorlds().contains(location.getWorld().getName());
     }
 }
