@@ -20,7 +20,7 @@ public class IsPlantCommand implements AddonSubCommand {
 
         int maxDistance = 30;
         if (args.length > 0) {
-            maxDistance = BUtil.parseInt(args[0]);
+            maxDistance = BUtil.parseIntOrZero(args[0]);
         }
 
         GardenPlant gardenPlant = gardenManager.getByLocation(player.getTargetBlockExact(maxDistance));

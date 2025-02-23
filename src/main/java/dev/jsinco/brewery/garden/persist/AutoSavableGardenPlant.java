@@ -27,6 +27,6 @@ public class AutoSavableGardenPlant implements ExternallyAutoSavable {
             SerializableGardenPlant serializableGardenPlant = new SerializableGardenPlant(gardenPlant);
             serializableGardenPlants.add(serializableGardenPlant);
         });
-        dataManager.saveAllGeneric(serializableGardenPlants, this.table(), true, SerializableGardenPlant.class);
+        dataManager.saveAllGeneric(serializableGardenPlants, this.table(), SerializableGardenPlant.class);
     }
 }

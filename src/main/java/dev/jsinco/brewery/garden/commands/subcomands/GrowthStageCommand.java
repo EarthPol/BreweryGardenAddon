@@ -17,7 +17,7 @@ public class GrowthStageCommand implements AddonSubCommand {
     public boolean execute(BreweryGarden addon, BreweryGardenConfig config, CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
 
-        int newGrowthStage = Math.min(BUtil.parseInt(args[0]), config.getFullyGrown());
+        int newGrowthStage = Math.min(BUtil.parseIntOrZero(args[0]), config.getFullyGrown());
 
         GardenManager gardenManager = BreweryGarden.getGardenManager();
         GardenPlant gardenPlant = gardenManager.getByLocation(player.getTargetBlockExact(30));

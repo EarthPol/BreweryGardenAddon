@@ -37,7 +37,7 @@ public class GiveCommand implements AddonSubCommand {
 
         int amount = 1;
         if (args.length >= 2) {
-            amount = BUtil.parseInt(args[1]);
+            amount = BUtil.parseIntOrZero(args[1]);
         }
 
         Player player = null;
