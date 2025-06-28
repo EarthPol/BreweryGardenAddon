@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -59,10 +60,7 @@ public class EventListeners implements Listener {
             // Drop a seed
             block.getWorld().dropItemNaturally(block.getLocation(),
                     seedsList.get(RANDOM.nextInt(seedsList.size())).getItemStack(1));
-        } else if (PlantType.isPlayerSkullBlock(block)) {
-            PlantType plantType = PlantType.getPlantType(block);
-            event.setDropItems(false);
-            block.getWorld().dropItemNaturally(block.getLocation(), plantType.getItemStack(1));
+            return;
         }
 
         GardenPlant gardenPlant = gardenManager.getByLocation(block);
@@ -73,11 +71,11 @@ public class EventListeners implements Listener {
         Logging.debugLog("Found a GardenPlant at Location for BlockBreak: " + block.getLocation());
         // GardenPlant#isValid won't work here. Block's material type won't update until after this event has finished firing.
         Material itemMaterial = event.getPlayer().getInventory().getItemInMainHand().getType();
-        if (block.getType() == Material.PLAYER_HEAD) { // Just gonna do this for now
+        if (block.getType() == Material.PLAYER_HEAD) {
             if (itemMaterial != Material.SHEARS) {
                 Logging.msg(event.getPlayer(), "&rThis plant needs to be interacted with &6shears &rto be obtained.");
+                event.setCancelled(true);
             }
-            event.setCancelled(true);
         } else {
             gardenManager.removePlant(gardenPlant);
         }
@@ -90,7 +88,6 @@ public class EventListeners implements Listener {
         if (block == null || isBlacklistedWorld(block.getLocation())) {
             return;
         }
-
         handlePlantShearing(event.getItem(), block);
         if (event.getBlockFace() == BlockFace.UP && event.getAction().isRightClick() && config.getPlantableBlocks().contains(block.getType())) {
             event.setCancelled(handleSeedPlacement(event.getItem(), block));

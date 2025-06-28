@@ -101,7 +101,7 @@ public class GardenPlant {
             if (block.getType() == Material.AIR) {
                 continue;
             } else if (block.getType() == Material.PLAYER_HEAD) {
-                block.getWorld().dropItemNaturally(block.getLocation(), this.type.getItemStack(RANDOM.nextInt(1, 4)));
+                block.getWorld().dropItemNaturally(block.getLocation(), this.type.getItemStack(1));
             }
             block.setType(Material.AIR);
         }
@@ -140,7 +140,10 @@ public class GardenPlant {
 
         if (dropPlantItem) {
             // Drop between 1-3 of the ItemStack
-            location.getWorld().dropItemNaturally(location, this.type.getItemStack(RANDOM.nextInt(1, 4)));
+            //location.getWorld().dropItemNaturally(location, this.type.getItemStack(RANDOM.nextInt(1, 4)));
+
+            // NO! As long as you may place fruits back onto the plant, that's a BAD idea lol
+            location.getWorld().dropItemNaturally(location, this.type.getItemStack(1));
         }
     }
 }
